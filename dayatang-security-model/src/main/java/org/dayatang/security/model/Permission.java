@@ -1,5 +1,8 @@
 package org.dayatang.security.model;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -8,9 +11,18 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author yyang
  *
  */
+@Entity
+@DiscriminatorValue("P")
 public class Permission extends Grantable {
 	
 	private static final long serialVersionUID = 7316666894482866864L;
+
+	Permission() {
+	}
+
+	public Permission(String name) {
+		super(name);
+	}
 
 	@Override
 	public boolean equals(Object other) {

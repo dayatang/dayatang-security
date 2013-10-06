@@ -10,30 +10,14 @@ import javax.persistence.Table;
 import com.dayatang.domain.AbstractEntity;
 
 /**
- * 参与者，是User和UserGroup的共同基类。可以对Actor授予角色或权限。
+ * 授权范围。子类分别代表机构范围等。
+ * @author yyang
+ *
  */
 @Entity
-@Table(name = "ACTORS")
+@Table(name = "SCOPES")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "CATEGORY", discriminatorType = DiscriminatorType.CHAR)
-public abstract class Actor extends AbstractEntity {
+public abstract class Scope extends AbstractEntity {
 
-	private static final long serialVersionUID = -4659049959430484022L;
-
-	private String name;
-
-	protected Actor() {
-	}
-
-	public Actor(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 }

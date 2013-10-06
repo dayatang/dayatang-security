@@ -1,5 +1,8 @@
 package org.dayatang.security.model;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -8,9 +11,18 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author yyang
  *
  */
+@Entity
+@DiscriminatorValue("U")
 public class User extends Actor {
 	
 	private static final long serialVersionUID = 7316666894482866864L;
+
+	User() {
+	}
+
+	public User(String name) {
+		super(name);
+	}
 
 	@Override
 	public boolean equals(Object other) {
