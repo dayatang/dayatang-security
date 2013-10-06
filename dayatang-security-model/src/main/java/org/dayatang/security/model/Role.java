@@ -53,6 +53,10 @@ public class Role extends Grantable {
 		permissions.remove(permission);
 	}
 
+	public boolean hasPermission(Permission permission) {
+		return permissions.contains(permission);
+	}
+
 	@Override
 	public boolean equals(Object other) {
 		if (this == other) {

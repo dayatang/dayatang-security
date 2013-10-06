@@ -17,7 +17,7 @@ import com.dayatang.domain.AbstractEntity;
 @Entity
 @Table(name = "SCOPES")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "CATEGORY", discriminatorType = DiscriminatorType.CHAR)
+@DiscriminatorColumn(name = "CATEGORY", discriminatorType = DiscriminatorType.STRING)
 public abstract class Scope extends AbstractEntity {
 
 }

@@ -17,18 +17,18 @@ public class UserGroupTest {
 	
 	@Before
 	public void beforeTest() {
-		grantGroup.addActor(parentGroup);
-		parentGroup.addActor(group1);
+		grantGroup.addChildGroup(parentGroup);
+		parentGroup.addChildGroup(group1);
 		//parentGroup.addActor(group2);
-		group1.addActor(user);
+		group1.addUser(user);
 	}
 	
 	@Test
 	public void getGroups() {
-		Set<UserGroup> groups = grantGroup.getGroups();
+		Set<UserGroup> groups = grantGroup.getChildren();
 		assertTrue(groups.contains(parentGroup));
 		assertFalse(groups.contains(group1));
-		groups = parentGroup.getGroups();
+		groups = parentGroup.getChildren();
 		assertTrue(groups.contains(group1));
 		assertFalse(groups.contains(group2));
 	}
@@ -43,15 +43,14 @@ public class UserGroupTest {
 	
 	@Test
 	public void addActor() {
-		assertTrue(parentGroup.containsActor(group1));
-		assertTrue(group1.containsActor(user));
-		assertTrue(parentGroup.containsActor(user));
+		assertTrue(group1.containsUser(user));
+		assertTrue(parentGroup.containsUser(user));
 	}
 	
 	@Test
 	public void removeActor() {
-		parentGroup.removeActor(group1);
-		assertFalse(parentGroup.containsActor(group1));
+		parentGroup.removeChildGroup(group1);
+		assertFalse(parentGroup.getChildren().contains(group1));
 	}
 
 }

@@ -1,5 +1,8 @@
 package org.dayatang.security.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -35,5 +38,29 @@ public abstract class Actor extends AbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void grant(Grantable grantable, Scope scope) {
+		if (Authorization.exists(this, grantable, scope)) {
+			return;
+		}
+		new Authorization(this, grantable, scope).save();
+	}
+	
+	protected Set<Grantable> getGrantables(Scope scope) {
+		return Authorization.getGrantablesOfActorInScope(this, scope);
+	}
+
+	protected Set<Permission> getPermissions(Scope scope) {
+		Set<Permission> results = new HashSet<Permission>();
+		for (Grantable grantable : getGrantables(scope)) {
+			if (grantable instanceof Permission) {
+				results.add((Permission) grantable);
+			} else {
+				Role role = (Role) grantable;
+				results.addAll(role.getPermissions());
+			}
+		}
+		return results;
 	}
 }

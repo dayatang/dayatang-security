@@ -1,7 +1,12 @@
 package org.dayatang.security.model;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -17,12 +22,34 @@ public class User extends Actor {
 	
 	private static final long serialVersionUID = 7316666894482866864L;
 
+	
+	@ManyToMany(mappedBy = "users")
+	private Set<UserGroup> groups = new HashSet<UserGroup>();
+	
+	
 	User() {
 	}
 
 	public User(String name) {
 		super(name);
 	}
+
+	public Set<UserGroup> getGroups() {
+		return Collections.unmodifiableSet(groups);
+	}
+
+	public boolean hasPermission(Permission permission, Scope scope) {
+		if (getPermissions(scope).contains(permission)) {
+			return true;
+		}
+		for (UserGroup group : getGroups()) {
+			if (group.hasPermission(permission, scope)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 
 	@Override
 	public boolean equals(Object other) {
