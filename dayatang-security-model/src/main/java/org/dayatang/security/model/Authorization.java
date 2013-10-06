@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -23,7 +24,7 @@ import com.dayatang.domain.QuerySettings;
  *
  */
 @Entity
-@Table(name = "AUTHORIZATIONS")
+@Table(name = "AUTHORIZATIONS", uniqueConstraints = @UniqueConstraint(columnNames = {"ACTOR_ID", "GRANTABLE_ID", "SCOPE_ID"}))
 public class Authorization extends AbstractEntity {
 
 	private static final long serialVersionUID = -3829499122651729475L;
@@ -67,6 +68,32 @@ public class Authorization extends AbstractEntity {
 	}
 
 	@Override
+	public void save() {
+		if (exists(actor, grantable, scope)) {
+			return;
+		}
+		super.save();
+	}
+
+	public static boolean exists(Actor actor, Grantable grantable, Scope scope) {
+		QuerySettings<Authorization> querySettings = QuerySettings.create(Authorization.class)
+				.eq("actor", actor).eq("grantable", grantable).eq("scope", scope);
+		Authorization authorization = getRepository().getSingleResult(querySettings);
+		return authorization == null ? false : true;
+	}
+
+	public static Set<Grantable> getGrantablesOfActorInScope(Actor actor, Scope scope) {
+		QuerySettings<Authorization> querySettings = QuerySettings.create(Authorization.class)
+				.eq("actor", actor).eq("scope", scope);
+		List<Authorization> authorizations = getRepository().find(querySettings);
+		Set<Grantable> results = new HashSet<Grantable>();
+		for (Authorization authorization : authorizations) {
+			results.add(authorization.getGrantable());
+		}
+		return results;
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		if (this == other) {
 			return true;
@@ -90,23 +117,5 @@ public class Authorization extends AbstractEntity {
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this).append(getActor()).append(getGrantable()).append(getScope()).build();
-	}
-
-	public static boolean exists(Actor actor, Grantable grantable, Scope scope) {
-		QuerySettings<Authorization> querySettings = QuerySettings.create(Authorization.class)
-				.eq("actor", actor).eq("grantable", grantable).eq("scope", scope);
-		Authorization authorization = getRepository().getSingleResult(querySettings);
-		return authorization == null ? false : true;
-	}
-
-	public static Set<Grantable> getGrantablesOfActorInScope(Actor actor, Scope scope) {
-		QuerySettings<Authorization> querySettings = QuerySettings.create(Authorization.class)
-				.eq("actor", actor).eq("scope", scope);
-		List<Authorization> authorizations = getRepository().find(querySettings);
-		Set<Grantable> results = new HashSet<Grantable>();
-		for (Authorization authorization : authorizations) {
-			results.add(authorization.getGrantable());
-		}
-		return results;
 	}
 }
