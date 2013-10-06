@@ -40,17 +40,23 @@ public abstract class Actor extends AbstractEntity {
 		this.name = name;
 	}
 	
+	/**
+	 * 在指定范围内授予权限或角色
+	 * @param grantable
+	 * @param scope
+	 */
 	public void grant(Grantable grantable, Scope scope) {
 		if (Authorization.exists(this, grantable, scope)) {
 			return;
 		}
 		new Authorization(this, grantable, scope).save();
 	}
-	
-	protected Set<Grantable> getGrantables(Scope scope) {
-		return Authorization.getGrantablesOfActorInScope(this, scope);
-	}
 
+	/**
+	 * 获取权限
+	 * @param scope
+	 * @return
+	 */
 	protected Set<Permission> getPermissions(Scope scope) {
 		Set<Permission> results = new HashSet<Permission>();
 		for (Grantable grantable : getGrantables(scope)) {
@@ -62,5 +68,9 @@ public abstract class Actor extends AbstractEntity {
 			}
 		}
 		return results;
+	}
+	
+	private Set<Grantable> getGrantables(Scope scope) {
+		return Authorization.getGrantablesOfActorInScope(this, scope);
 	}
 }

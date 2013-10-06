@@ -4,11 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -27,8 +24,6 @@ import com.dayatang.domain.QuerySettings;
  */
 @Entity
 @Table(name = "AUTHORIZATIONS")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "CATEGORY", discriminatorType = DiscriminatorType.CHAR)
 public class Authorization extends AbstractEntity {
 
 	private static final long serialVersionUID = -3829499122651729475L;
@@ -41,7 +36,7 @@ public class Authorization extends AbstractEntity {
 	@JoinColumn(name = "GRANTABLE_ID")
 	private Grantable grantable;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "SCOPE_ID")
 	private Scope scope;
 
