@@ -42,14 +42,14 @@ public abstract class Actor extends AbstractEntity {
 	
 	/**
 	 * 在指定范围内授予权限或角色
-	 * @param grantable
+	 * @param authority
 	 * @param scope
 	 */
-	public void grant(Grantable grantable, Scope scope) {
-		if (Authorization.exists(this, grantable, scope)) {
+	public void grant(Authority authority, Scope scope) {
+		if (Authorization.exists(this, authority, scope)) {
 			return;
 		}
-		new Authorization(this, grantable, scope).save();
+		new Authorization(this, authority, scope).save();
 	}
 
 	/**
@@ -59,18 +59,18 @@ public abstract class Actor extends AbstractEntity {
 	 */
 	protected Set<Permission> getPermissions(Scope scope) {
 		Set<Permission> results = new HashSet<Permission>();
-		for (Grantable grantable : getGrantables(scope)) {
-			if (grantable instanceof Permission) {
-				results.add((Permission) grantable);
+		for (Authority authority : getAuthorities(scope)) {
+			if (authority instanceof Permission) {
+				results.add((Permission) authority);
 			} else {
-				Role role = (Role) grantable;
+				Role role = (Role) authority;
 				results.addAll(role.getPermissions());
 			}
 		}
 		return results;
 	}
 	
-	private Set<Grantable> getGrantables(Scope scope) {
-		return Authorization.getGrantablesOfActorInScope(this, scope);
+	private Set<Authority> getAuthorities(Scope scope) {
+		return Authorization.getAuthoritiesOfActorInScope(this, scope);
 	}
 }

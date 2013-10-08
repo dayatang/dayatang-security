@@ -28,7 +28,9 @@ public class UserGroup extends Actor {
 	private static final long serialVersionUID = -8375222067841000014L;
 
 	@ManyToOne
-	@JoinColumn(name = "PARENT_ID")
+    @JoinTable(name = "USER_GROUP_RELATION",
+            joinColumns = @JoinColumn(name = "PARENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "CHILD_ID"))
 	private UserGroup parent;
 	
 	@OneToMany(mappedBy = "parent")
@@ -46,6 +48,11 @@ public class UserGroup extends Actor {
 	public UserGroup(String name) {
 		super(name);
 	}
+
+    public UserGroup(String name, UserGroup parent) {
+        super(name);
+        setParent(parent);
+    }
 
 	public void addUser(User... users) {
 		this.users.addAll(Arrays.asList(users));
@@ -69,11 +76,14 @@ public class UserGroup extends Actor {
 		}
 	}
 
-	public void setParent(UserGroup parent) {
+	public final void setParent(UserGroup parent) {
+        if (contains(parent)) {
+            throw new IllegalArgumentException("Cannot set parent to it self or offspring!");
+        }
 		this.parent = parent;
 	}
 
-	private UserGroup getParent() {
+	public UserGroup getParent() {
 		return parent;
 	}
 
@@ -93,6 +103,25 @@ public class UserGroup extends Actor {
 		return Collections.unmodifiableSet(children);
 	}
 
+    /**
+     * 判断是否直接或间接包含用户组group。
+     * 一个用户组同时包含它自身。
+     * @param group
+     * @return
+     */
+    public boolean contains(UserGroup group) {
+        if (group == null) {
+            return false;
+        }
+        if (equals(group)) {
+            return true;
+        }
+        if (children.contains(group)) {
+            return true;
+        }
+        return contains(group.getParent());
+    }
+
 	public Set<User> getUsers() {
 		return Collections.unmodifiableSet(users);
 	}
@@ -101,7 +130,10 @@ public class UserGroup extends Actor {
 		if (getPermissions(scope).contains(permission)) {
 			return true;
 		}
-		return getParent().hasPermission(permission, scope);
+        if (parent == null) {
+            return false;
+        }
+		return parent.hasPermission(permission, scope);
 	}
 
 	@Override

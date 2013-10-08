@@ -15,19 +15,19 @@ import com.dayatang.domain.AbstractEntity;
  *
  */
 @Entity
-@Table(name = "GRANTABLES")
+@Table(name = "AUTHORITIES")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "CATEGORY", discriminatorType = DiscriminatorType.CHAR)
-public abstract class Grantable extends AbstractEntity {
+public abstract class Authority extends AbstractEntity {
 
 	private static final long serialVersionUID = -262442090925650546L;
 
 	private String name;
 
-	protected Grantable() {
+	protected Authority() {
 	}
 
-	public Grantable(String name) {
+	public Authority(String name) {
 		this.name = name;
 	}
 

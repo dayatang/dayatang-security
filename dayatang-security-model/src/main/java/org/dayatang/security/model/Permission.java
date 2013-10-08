@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 @Entity
 @DiscriminatorValue("P")
-public class Permission extends Grantable {
+public class Permission extends Authority {
 	
 	private static final long serialVersionUID = 7316666894482866864L;
 

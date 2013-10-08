@@ -20,7 +20,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 @Entity
 @DiscriminatorValue("R")
-public class Role extends Grantable {
+public class Role extends Authority {
 
 	private static final long serialVersionUID = 6108585828740676974L;
 	
