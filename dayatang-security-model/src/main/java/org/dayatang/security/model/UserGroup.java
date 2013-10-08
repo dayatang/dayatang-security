@@ -62,20 +62,6 @@ public class UserGroup extends Actor {
 		this.users.removeAll(Arrays.asList(users));
 	}
 
-	public void addChildGroup(UserGroup... userGroups) {
-		for (UserGroup each : userGroups) {
-			this.children.add(each);
-			each.setParent(this);
-		}
-	}
-
-	public void removeChildGroup(UserGroup... userGroups) {
-		for (UserGroup each : userGroups) {
-			this.children.remove(each);
-			each.setParent(null);
-		}
-	}
-
 	public final void setParent(UserGroup parent) {
         if (contains(parent)) {
             throw new IllegalArgumentException("Cannot set parent to it self or offspring!");
@@ -87,12 +73,12 @@ public class UserGroup extends Actor {
 		return parent;
 	}
 
-	public boolean containsUser(User user) {
+	public boolean contains(User user) {
 		if (users.contains(user)) {
 			return true;
 		}
 		for (UserGroup each : getChildren()) {
-			if (each.containsUser(user)) {
+			if (each.contains(user)) {
 				return true;
 			}
 		}

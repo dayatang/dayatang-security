@@ -43,8 +43,8 @@ public class UserGroupTest {
 	
 	@Test
 	public void addActor() {
-		assertTrue(group1.containsUser(user));
-		assertTrue(parentGroup.containsUser(user));
+		assertTrue(group1.contains(user));
+		assertTrue(parentGroup.contains(user));
 	}
 	
 	@Test

@@ -57,7 +57,7 @@ public abstract class Actor extends AbstractEntity {
 	 * @param scope
 	 * @return
 	 */
-	protected Set<Permission> getPermissions(Scope scope) {
+    public Set<Permission> getPermissions(Scope scope) {
 		Set<Permission> results = new HashSet<Permission>();
 		for (Authority authority : getAuthorities(scope)) {
 			if (authority instanceof Permission) {

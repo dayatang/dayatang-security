@@ -49,7 +49,6 @@ public class User extends Actor {
 		}
 		return false;
 	}
-	
 
 	@Override
 	public boolean equals(Object other) {
