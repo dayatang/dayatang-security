@@ -39,4 +39,11 @@ public abstract class Authority extends AbstractEntity {
 		this.name = name;
 	}
 
+    @Override
+    public void remove() {
+        for (Authorization authorization : Authorization.findByAuthority(this)) {
+            authorization.remove();
+        }
+        super.remove();
+    }
 }

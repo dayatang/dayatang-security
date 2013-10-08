@@ -39,8 +39,16 @@ public abstract class Actor extends AbstractEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	/**
+
+    @Override
+    public void remove() {
+        for (Authorization authorization : Authorization.findByActor(this)) {
+            authorization.remove();
+        }
+        super.remove();
+    }
+
+    /**
 	 * 在指定范围内授予权限或角色
 	 * @param authority
 	 * @param scope

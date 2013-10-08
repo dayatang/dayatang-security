@@ -96,7 +96,7 @@ public class Authorization extends AbstractEntity {
      * @param actor
      * @return
      */
-    public static Set<Authorization> findByActor(Actor actor) {
+    public static Set<Authorization> getAuthorizationsOf(Actor actor) {
         Set<Authorization> results = new HashSet<Authorization>();
         QuerySettings<Authorization> querySettings = QuerySettings.create(Authorization.class)
                 .eq("actor", actor);
@@ -104,13 +104,13 @@ public class Authorization extends AbstractEntity {
         results.addAll(authorizations);
         if (actor instanceof User) {
             for (UserGroup group : ((User) actor).getGroups()) {
-                results.addAll(findByActor(group));
+                results.addAll(getAuthorizationsOf(group));
             }
         }
         if (actor instanceof UserGroup) {
             UserGroup group = (UserGroup) actor;
             if (group.getParent() != null) {
-                results.addAll(findByActor(group.getParent()));
+                results.addAll(getAuthorizationsOf(group.getParent()));
             }
         }
         return results;
@@ -118,13 +118,25 @@ public class Authorization extends AbstractEntity {
 
 	public static Set<Authority> getAuthoritiesOfActorInScope(Actor actor, Scope scope) {
         Set<Authority> results = new HashSet<Authority>();
-        for (Authorization authorization : findByActor(actor)) {
+        for (Authorization authorization : getAuthorizationsOf(actor)) {
             if (authorization.getScope().contains(scope)) {
                 results.add(authorization.getAuthority());
             }
         }
 		return results;
 	}
+
+    static List<Authorization> findByActor(Actor actor) {
+        QuerySettings<Authorization> querySettings = QuerySettings.create(Authorization.class)
+                .eq("actor", actor);
+        return getRepository().find(querySettings);
+    }
+
+    static List<Authorization> findByAuthority(Authority authority) {
+        QuerySettings<Authorization> querySettings = QuerySettings.create(Authorization.class)
+                .eq("authority", authority);
+        return getRepository().find(querySettings);
+    }
 
 	@Override
 	public boolean equals(Object other) {
