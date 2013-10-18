@@ -1,9 +1,6 @@
 package org.dayatang.security.model;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,6 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.dayatang.domain.QuerySettings;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -92,8 +90,8 @@ public class UserGroup extends Actor {
     /**
      * 判断是否直接或间接包含用户组group。
      * 一个用户组同时包含它自身。
-     * @param group
-     * @return
+     * @param group 一个用户组
+     * @return 如果当前用户组包含group，则返回true，否则返回false。
      */
     public boolean contains(UserGroup group) {
         if (group == null) {
@@ -121,6 +119,14 @@ public class UserGroup extends Actor {
         }
 		return parent.hasPermission(permission, scope);
 	}
+
+    /**
+     * 获取根用户组的集合，即没有父用户组的用户组
+     * @return 根用户组的集合
+     */
+    public List<UserGroup> getRootGroups() {
+        return getRepository().find(QuerySettings.create(UserGroup.class).isNull("parent"));
+    }
 
 	@Override
 	public boolean equals(Object other) {
