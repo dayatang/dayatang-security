@@ -29,11 +29,11 @@ public class Authorization extends AbstractEntity {
 
 	private static final long serialVersionUID = -3829499122651729475L;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "ACTOR_ID")
 	private Actor actor;
-	
-	@ManyToOne
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "AUTHORITY_ID")
 	private Authority authority;
 	

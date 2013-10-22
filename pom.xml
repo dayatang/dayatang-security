@@ -618,5 +618,6 @@
 
 	<modules>
         <module>dayatang-security-model</module>
+        <module>dayatang-security-hrm</module>
     </modules>
 </project>

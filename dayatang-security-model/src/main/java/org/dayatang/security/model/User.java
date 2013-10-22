@@ -8,6 +8,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
+import com.dayatang.domain.QuerySettings;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -27,7 +28,7 @@ public class User extends Actor {
 	private Set<UserGroup> groups = new HashSet<UserGroup>();
 	
 	
-	User() {
+	protected User() {
 	}
 
 	public User(String name) {
@@ -72,4 +73,7 @@ public class User extends Actor {
 		return getName();
 	}
 
+    public static User getByName(String username) {
+        return getRepository().getSingleResult(QuerySettings.create(User.class).eq("name", username));
+    }
 }

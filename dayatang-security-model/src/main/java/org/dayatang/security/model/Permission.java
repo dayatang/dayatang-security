@@ -3,6 +3,7 @@ package org.dayatang.security.model;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import com.dayatang.domain.QuerySettings;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -46,4 +47,9 @@ public class Permission extends Authority {
 		return getName();
 	}
 
+    public static Permission getByName(String name) {
+        return getRepository().getSingleResult(QuerySettings.create(Permission.class).eq("name", name));
+    }
+
 }
+
