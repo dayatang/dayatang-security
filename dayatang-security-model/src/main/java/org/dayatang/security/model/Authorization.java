@@ -89,6 +89,7 @@ public class Authorization extends AbstractEntity {
 		return authorization == null ? false : true;
 	}
 
+
     /**
      * 找到参与者actor的所有授权信息。
      * 如果actor是个用户组，则包含它的父用户组的授权信息；

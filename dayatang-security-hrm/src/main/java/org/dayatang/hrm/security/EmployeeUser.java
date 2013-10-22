@@ -1,5 +1,6 @@
 package org.dayatang.hrm.security;
 
+import com.dayatang.domain.QuerySettings;
 import org.dayatang.hrm.organisation.domain.Employee;
 import org.dayatang.security.model.User;
 
@@ -29,5 +30,14 @@ public class EmployeeUser extends User {
 
     public EmployeeUser(String name) {
         super(name);
+    }
+
+    public EmployeeUser(Employee employee) {
+        super(employee.getSn());
+        this.employee = employee;
+    }
+
+    public static EmployeeUser getByEmployee(Employee employee) {
+        return getRepository().getSingleResult(QuerySettings.create(EmployeeUser.class).eq("employee", employee));
     }
 }

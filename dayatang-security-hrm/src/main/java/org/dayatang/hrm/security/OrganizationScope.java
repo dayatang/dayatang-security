@@ -1,10 +1,15 @@
 package org.dayatang.hrm.security;
 
 import com.dayatang.domain.QuerySettings;
+import org.dayatang.hrm.organisation.domain.OrgLineMgmt;
 import org.dayatang.hrm.organisation.domain.Organization;
 import org.dayatang.security.model.Scope;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,7 +56,23 @@ public class OrganizationScope extends Scope {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public static Scope getByOrganization(Organization organization) {
+    public static OrganizationScope getByOrganization(Organization organization) {
         return getRepository().getSingleResult(QuerySettings.create(OrganizationScope.class).eq("organization", organization));
+    }
+
+    @Override
+    public Scope getParent() {
+        Organization parent = OrgLineMgmt.getParentOfOrganization(organization, new Date());
+        return OrganizationScope.getByOrganization(parent);
+    }
+
+    @Override
+    public Set<Scope> getChildren() {
+        List<Organization> orgs = OrgLineMgmt.findChildrenOfOrganization(organization, new Date());
+        Set<Scope> results = new HashSet<Scope>();
+        for (Organization org: orgs) {
+            results.add(OrganizationScope.getByOrganization(org));
+        }
+        return results;
     }
 }

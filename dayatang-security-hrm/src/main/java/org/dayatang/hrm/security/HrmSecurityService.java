@@ -1,6 +1,6 @@
 package org.dayatang.hrm.security;
 
-import org.dayatang.hrm.organisation.domain.Organization;
+import org.dayatang.hrm.organisation.domain.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,5 +10,11 @@ import org.dayatang.hrm.organisation.domain.Organization;
  * To change this template use File | Settings | File Templates.
  */
 public interface HrmSecurityService {
+
+
     void grantPermission(String username, String permission, Organization organization);
+
+    void grantPermission(Employee employee, String permission, Organization organization);
+
+    boolean hasPermission(String username, String permission, Organization organization);
 }

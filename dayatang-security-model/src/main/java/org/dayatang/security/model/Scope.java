@@ -19,29 +19,9 @@ import java.util.Set;
 @DiscriminatorColumn(name = "CATEGORY", discriminatorType = DiscriminatorType.STRING)
 public abstract class Scope extends AbstractEntity {
 
-    @ManyToOne
-    @JoinTable(name = "SCOPE_RELATION",
-            joinColumns = @JoinColumn(name = "PARENT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "CHILD_ID"))
-    private Scope parent;
+    public abstract Scope getParent();
 
-    @OneToMany(mappedBy = "parent")
-    private Set<Scope> children = new HashSet<Scope>();
-
-    public Scope getParent() {
-        return parent;
-    }
-
-    public final void setParent(Scope parent) {
-        if (contains(parent)) {
-            throw new IllegalArgumentException("Cannot set parent to it self or offspring!");
-        }
-        this.parent = parent;
-    }
-
-    public Set<Scope> getChildren() {
-        return Collections.unmodifiableSet(children);
-    }
+    public abstract Set<Scope> getChildren();
 
     public boolean contains(Scope scope) {
         if (scope == null) {
@@ -50,7 +30,7 @@ public abstract class Scope extends AbstractEntity {
         if (equals(scope)) {
             return true;
         }
-        if (children.contains(scope)) {
+        if (getChildren().contains(scope)) {
             return true;
         }
         return contains(scope.getParent());
