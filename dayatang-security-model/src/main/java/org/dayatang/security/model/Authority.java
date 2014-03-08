@@ -7,10 +7,11 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
-import com.dayatang.domain.AbstractEntity;
+import org.dayatang.domain.AbstractEntity;
 
 /**
  * 可授权实体，代表某种权限（Permission）或权限集合（Role），可被授予Actor
+ *
  * @author yyang
  *
  */
@@ -20,24 +21,24 @@ import com.dayatang.domain.AbstractEntity;
 @DiscriminatorColumn(name = "CATEGORY", discriminatorType = DiscriminatorType.CHAR)
 public abstract class Authority extends AbstractEntity {
 
-	private static final long serialVersionUID = -262442090925650546L;
+    private static final long serialVersionUID = -262442090925650546L;
 
-	private String name;
+    private String name;
 
-	protected Authority() {
-	}
+    protected Authority() {
+    }
 
-	public Authority(String name) {
-		this.name = name;
-	}
+    public Authority(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public void remove() {
@@ -45,5 +46,15 @@ public abstract class Authority extends AbstractEntity {
             authorization.remove();
         }
         super.remove();
+    }
+
+    @Override
+    public String[] businessKeys() {
+        return new String[]{"name"};
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

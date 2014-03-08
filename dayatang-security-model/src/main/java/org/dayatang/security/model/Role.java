@@ -10,8 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * 角色。角色是权限的集合。
@@ -24,19 +22,19 @@ public class Role extends Authority {
 
 	private static final long serialVersionUID = 6108585828740676974L;
 	
-	@ManyToMany
-	@JoinTable(name = "ROLE_PERMISSION_MAP", 
-		joinColumns = @JoinColumn(name = "ROLE_ID"), 
-		inverseJoinColumns = @JoinColumn(name = "PERMISSION_ID"))
 	private Set<Permission> permissions = new HashSet<Permission>();
 
-	Role() {
+	protected Role() {
 	}
 
 	public Role(String name) {
 		super(name);
 	}
 
+	@ManyToMany
+	@JoinTable(name = "ROLE_PERMISSION_MAP", 
+		joinColumns = @JoinColumn(name = "ROLE_ID"), 
+		inverseJoinColumns = @JoinColumn(name = "PERMISSION_ID"))
 	public Set<Permission> getPermissions() {
 		return Collections.unmodifiableSet(permissions);
 	}
@@ -55,28 +53,6 @@ public class Role extends Authority {
 
 	public boolean hasPermission(Permission permission) {
 		return permissions.contains(permission);
-	}
-
-	@Override
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof Role)) {
-			return false;
-		}
-		Role that = (Role) other;
-		return new EqualsBuilder().append(this.getName(), that.getName()).isEquals();
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(13, 47).append(getName()).toHashCode();
-	}
-
-	@Override
-	public String toString() {
-		return getName();
 	}
 
 }

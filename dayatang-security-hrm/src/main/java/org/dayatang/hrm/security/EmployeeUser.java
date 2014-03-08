@@ -1,6 +1,5 @@
 package org.dayatang.hrm.security;
 
-import com.dayatang.domain.QuerySettings;
 import org.dayatang.hrm.organisation.domain.Employee;
 import org.dayatang.security.model.User;
 
@@ -20,11 +19,9 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue("EMP")
 public class EmployeeUser extends User {
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id", unique = true)
     private Employee employee;
 
-    EmployeeUser() {
+    protected EmployeeUser() {
         super();
     }
 
@@ -37,7 +34,17 @@ public class EmployeeUser extends User {
         this.employee = employee;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "employee_id", unique = true)
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
     public static EmployeeUser getByEmployee(Employee employee) {
-        return getRepository().getSingleResult(QuerySettings.create(EmployeeUser.class).eq("employee", employee));
+        return getRepository().createCriteriaQuery(EmployeeUser.class).eq("employee", employee).singleResult();
     }
 }

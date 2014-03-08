@@ -2,10 +2,8 @@ package org.dayatang.security.model;
 
 import javax.persistence.*;
 
-import com.dayatang.domain.AbstractEntity;
+import org.dayatang.domain.AbstractEntity;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**

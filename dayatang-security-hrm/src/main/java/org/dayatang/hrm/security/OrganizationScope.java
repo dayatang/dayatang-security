@@ -1,6 +1,5 @@
 package org.dayatang.hrm.security;
 
-import com.dayatang.domain.QuerySettings;
 import org.dayatang.hrm.organisation.domain.OrgLineMgmt;
 import org.dayatang.hrm.organisation.domain.Organization;
 import org.dayatang.security.model.Scope;
@@ -22,17 +21,17 @@ import java.util.Set;
 @DiscriminatorValue("ORG")
 public class OrganizationScope extends Scope {
 
-    OrganizationScope() {
+    protected OrganizationScope() {
     }
 
     public OrganizationScope(Organization organization) {
         this.organization = organization;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "organization_id", unique = true)
     private Organization organization;
 
+    @ManyToOne
+    @JoinColumn(name = "organization_id", unique = true)
     public Organization getOrganization() {
         return organization;
     }
@@ -41,23 +40,9 @@ public class OrganizationScope extends Scope {
         this.organization = organization;
     }
 
-    @Override
-    public int hashCode() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public String toString() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     public static OrganizationScope getByOrganization(Organization organization) {
-        return getRepository().getSingleResult(QuerySettings.create(OrganizationScope.class).eq("organization", organization));
+        return getRepository().createCriteriaQuery(OrganizationScope.class).eq("organization", organization).singleResult();
     }
 
     @Override
@@ -74,5 +59,10 @@ public class OrganizationScope extends Scope {
             results.add(OrganizationScope.getByOrganization(org));
         }
         return results;
+    }
+
+    @Override
+    public String[] businessKeys() {
+        return new String[] {"organization"};
     }
 }
