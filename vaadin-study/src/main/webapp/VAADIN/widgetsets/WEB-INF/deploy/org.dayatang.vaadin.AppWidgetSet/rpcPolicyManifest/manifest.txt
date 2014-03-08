@@ -1,0 +1,2 @@
+# Module org.dayatang.vaadin.AppWidgetSet
+# RPC service class, partial path of RPC policy file
