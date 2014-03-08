@@ -45,12 +45,14 @@ public class OrganizationScope extends Scope {
         return getRepository().createCriteriaQuery(OrganizationScope.class).eq("organization", organization).singleResult();
     }
 
+    @Transient
     @Override
     public Scope getParent() {
         Organization parent = OrgLineMgmt.getParentOfOrganization(organization, new Date());
         return OrganizationScope.getByOrganization(parent);
     }
 
+    @Transient
     @Override
     public Set<Scope> getChildren() {
         List<Organization> orgs = OrgLineMgmt.findChildrenOfOrganization(organization, new Date());
