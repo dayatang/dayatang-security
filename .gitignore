@@ -9,5 +9,6 @@
 .iml
 .settings
 .project
+.classpath
 *.iml
 /dayatang-security-model/.classpath
